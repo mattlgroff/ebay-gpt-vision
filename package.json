@@ -1,0 +1,5 @@
+{
+  "name": "ebay-gpt-vision",
+  "module": "index.js",
+  "type": "module"
+}
