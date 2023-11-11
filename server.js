@@ -160,8 +160,25 @@ async function handleSearchRequest(req) {
     });
 }
 
+// Function to handle OPTIONS request for CORS preflight
+function handleOptionsRequest() {
+    return new Response(null, {
+        status: 204, // No Content
+        headers: {
+            'Access-Control-Allow-Origin': '*', // Allow all origins
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS', // Allowed request methods
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Allowed headers
+        },
+    });
+}
+
 Bun.serve({
     async fetch(req) {
+        // Handle preflight CORS OPTIONS request
+        if (req.method === 'OPTIONS') {
+            return handleOptionsRequest();
+        }
+
         // Handle search requests
         if (req.method === 'POST' && new URL(req.url).pathname === '/search') {
             return handleSearchRequest(req);
