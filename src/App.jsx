@@ -143,7 +143,7 @@ async function requestAppraisal(imageUrl, details) {
     console.log('details:', details);
 
     try {
-        const response = await fetch('http://localhost:3000' + '/search', {
+        const response = await fetch('https://ebay-gpt-vision.onrender.com/search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
