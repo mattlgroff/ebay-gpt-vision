@@ -14,6 +14,8 @@ COPY src src
 COPY public public
 COPY index.html index.html
 COPY vite.config.js vite.config.js
+COPY tailwind.config.js tailwind.config.js
+COPY postcss.config.js postcss.config.js
 
 # Install dependencies (for frontend, backend has none)
 RUN bun install
