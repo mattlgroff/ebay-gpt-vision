@@ -96,8 +96,8 @@ const App = () => {
                 {appraisalResponse && (
                     <div className="mt-4 p-4 bg-gray-100 rounded-md">
                         <h3 className="text-lg font-semibold">Appraisal Result</h3>
+                        <p className="font-bold">Appraised Price: {appraisalResponse.appraised_price}</p>
                         <p>{appraisalResponse.logic_for_the_appraised_price}</p>
-                        <p className="font-bold">Appraised Price: ${appraisalResponse.appraised_price}</p>
                     </div>
                 )}
             </form>
