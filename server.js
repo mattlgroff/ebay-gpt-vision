@@ -1,3 +1,5 @@
+const { promises: fs } = require('fs');
+
 const EBAY_ACCESS_TOKEN = process.env.EBAY_ACCESS_TOKEN; // Make sure to have this in your .env
 
 // Function to fetch eBay sales history data with an optional condition filter
@@ -48,7 +50,7 @@ async function getSearchQueryFromImage(imageUrl, additionalDetails) {
 async function getBestListingAndPrice(listings) {
     // This function should call the OpenAI GPT-4 Turbo API with the eBay listings and return the best listing and a suggested price.
     // Implement the API call to OpenAI with the provided listings array.
-    return { bestListing: listings?.length ? listings[0] : null, suggestedPrice: 'suggested price based on analysis', }; // Placeholder return
+    return { bestListing: listings?.length ? listings[0] : null, suggestedPrice: 'suggested price based on analysis' }; // Placeholder return
 }
 
 // Function to handle the /search endpoint
@@ -61,7 +63,7 @@ async function handleSearchRequest(req) {
 
     const finalResult = await getBestListingAndPrice(listings);
 
-    return new Response(JSON.stringify({ ...finalResult}), {
+    return new Response(JSON.stringify({ ...finalResult }), {
         status: 200,
         headers: {
             'Content-Type': 'application/json',
@@ -79,7 +81,38 @@ Bun.serve({
             return handleSearchRequest(req);
         }
 
-        // Handle other requests
+        // Serve static files for any other GET request
+        if (req.method === 'GET') {
+            const urlPath = new URL(req.url).pathname;
+            // Determine the correct file path
+            let filePath = urlPath === '/' ? './dist/index.html' : `./dist${urlPath}`;
+
+            // Attempt to serve the file
+            try {
+                // Remove the './dist' prefix when accessing file system
+                const fsPath = filePath.slice(2);
+
+                // Check if the file exists using the fsPath without the './dist' prefix
+                await fs.stat(fsPath);
+
+                // Serve the file with automatic MIME type detection
+                return new Response(Bun.file(filePath));
+            } catch (error) {
+                // If the file is not found, serve index.html for SPA routing
+                if (error.code === 'ENOENT' && !urlPath.startsWith('/api/')) {
+                    // Assuming '/api/' is used for API routes
+                    return new Response(Bun.file('./dist/index.html'));
+                }
+
+                // Log the error for debugging
+                console.error(error);
+
+                // Return a 404 response if the file is not found or any other error occurs
+                return new Response('Not found', { status: 404 });
+            }
+        }
+
+        // Handle 404s
         return new Response('Not found', { status: 404 });
     },
 });
