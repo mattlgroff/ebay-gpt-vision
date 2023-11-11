@@ -95,6 +95,7 @@ const App = () => {
                 {loading && <div className="mt-4 flex justify-center"> {/* Spinner or loading indicator */}</div>}
                 {appraisalResponse && (
                     <div className="mt-4 p-4 bg-gray-100 rounded-md">
+                        <p className="font-bold">Search Terms Used: {appraisalResponse.search_term_used}</p>
                         <h3 className="text-lg font-semibold">Appraisal Result</h3>
                         <p className="font-bold">Appraised Price: {appraisalResponse.appraised_price}</p>
                         <p>{appraisalResponse.logic_for_the_appraised_price}</p>

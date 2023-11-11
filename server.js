@@ -132,6 +132,7 @@ The json output should contain the following fields:\n
         return {
             logic_for_the_appraised_price: parsedOutput.logic_for_the_appraised_price,
             appraised_price: parsedOutput.appraised_price,
+            search_term_used: searchQuery,
         };
     } catch (error) {
         console.log('Error calling OpenAI');
